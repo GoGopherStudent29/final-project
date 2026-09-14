@@ -185,16 +185,16 @@
   <!-- หัวข้อหลัก -->
   <h1 class="main-title">CRU map</h1>
 
-  <!-- คอนเทนเนอร์แบ่ง 2 ฝั่ง -->
+  <!-- 2 side container -->
   <div class="app-container">
 
-    <!-- ฝั่งซ้าย: แสดงข้อมูลตึกที่เลือก -->
+    <!-- right: description -->
     <div class="left-panel">
       <div id="building-name" class="building-title">click on any building</div>
       <img id="building-img" class="building-img" src="" alt="รูปภาพตึก">
     </div>
 
-    <!-- ฝั่งขวา: แผนที่โรงเรียนย่อ -->
+    <!-- right: map -->
     <div class="right-panel">
       <div class="map-frame">
 
@@ -279,7 +279,7 @@
       ========================================== -->
   <script>
     /* ----------------------------------------------------
-       building data (แก้ไขใส่เฉพาะชื่อไฟล์รูปภาพ)
+       building data
        ---------------------------------------------------- */
     const buildingData = {
       'pracha': {
@@ -355,35 +355,35 @@
       }
     };
 
-    // ปุ่มปัจจุบันที่ถูกเลือก
+    // sel but
     let currentSelectedBtn = null;
 
     /* ----------------------------------------------------
-       ฟังก์ชันเมื่อคลิกเลือกตึก
+       buildin that selected
        ---------------------------------------------------- */
     function selectBuilding(buildingKey, btnElement) {
       const data = buildingData[buildingKey];
 
       if (data) {
-        // อัปเดตชื่อตึกทางฝั่งซ้าย
+        // right buil upd
         document.getElementById('building-name').innerText = data.name;
 
-        // อัปเดตรูปภาพทางฝั่งซ้าย
+        // left buil upd
         const imgElement = document.getElementById('building-img');
         imgElement.src = data.image;
         imgElement.alt = data.name;
         imgElement.style.display = 'block'; // สั่งให้แสดงรูปภาพ
       }
 
-      // ลบแถบสีเขียวออกจากปุ่มเดิม
+      // green delet
       if (currentSelectedBtn !== null) {
         currentSelectedBtn.classList.remove('active');
       }
 
-      // เพิ่มสีเขียวให้ปุ่มที่เพิ่งกด
+      // green add
       btnElement.classList.add('active');
 
-      // บันทึกปุ่มปัจจุบัน
+      // green store
       currentSelectedBtn = btnElement;
     }
   </script>
