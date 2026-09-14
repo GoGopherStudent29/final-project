@@ -185,16 +185,16 @@
   <!-- หัวข้อหลัก -->
   <h1 class="main-title">CRU map</h1>
 
-  <!-- 2 side container -->
+  <!-- คอนเทนเนอร์แบ่ง 2 ฝั่ง -->
   <div class="app-container">
 
-    <!-- right: description -->
+    <!-- ฝั่งซ้าย: แสดงข้อมูลตึกที่เลือก -->
     <div class="left-panel">
       <div id="building-name" class="building-title">click on any building</div>
       <img id="building-img" class="building-img" src="" alt="รูปภาพตึก">
     </div>
 
-    <!-- right: map -->
+    <!-- ฝั่งขวา: แผนที่โรงเรียนย่อ -->
     <div class="right-panel">
       <div class="map-frame">
 
@@ -279,12 +279,12 @@
       ========================================== -->
   <script>
     /* ----------------------------------------------------
-       building data
+       building data (แก้ไขใส่เฉพาะชื่อไฟล์รูปภาพ)
        ---------------------------------------------------- */
     const buildingData = {
       'pracha': {
         name: 'publication [อาคารประชาสัมพันธ์]',
-        image: 'b-stu.jpg'
+        image: 'b-pub.jpg'
       },
       'b1': {
         name: 'Building 1 [อาคาร 1]',
@@ -324,66 +324,67 @@
       },
       'nursing': {
         name: 'Nursing [ห้องพยาบาล]',
-        image: ''
+        image: 'https://via.placeholder.com/400x300?text=Nursing+Room'
       },
       'bank': {
         name: 'Bank [ธนาคารโรงเรียน]',
-        image: ''
+        image: 'b-bank'
       },
       'pokkrong': {
         name: 'student management [อาคารกลุ่มบริหารงานปกครอง]',
-        image: ''
+        image: 'b-stu.jpg'
       },
       'assembly': {
         name: 'Assembly field [ลานเข้าแถว]',
-        image: 'b-1'
+        image: 'b-assm'
       },
       'gym': {
         name: 'Gym [โรงยิม / อาคารพลศึกษา]',
-        image: ''
+        image: 'b-gym'
       },
       'dome': {
         name: 'Dome [อาคารโดมอเนกประสงค์]',
-        image: ''
+        image: 'b-dome.jpg'
       },
       'farm': {
         name: 'Farm [แปลงเกษตร / สวนการเรียนรู้]',
-        image: ''
+        image: 'b-farm'
+      },
       'football': {
         name: 'Football field [สนามฟุตบอล]',
-        image: ''
+        image: 'b-feild.jpg'
       }
     };
 
-    // sel but
+    // ปุ่มปัจจุบันที่ถูกเลือก
     let currentSelectedBtn = null;
 
     /* ----------------------------------------------------
-       buildin that selected
+       ฟังก์ชันเมื่อคลิกเลือกตึก
        ---------------------------------------------------- */
     function selectBuilding(buildingKey, btnElement) {
       const data = buildingData[buildingKey];
 
       if (data) {
-        // right buil upd
+        // อัปเดตชื่อตึกทางฝั่งซ้าย
         document.getElementById('building-name').innerText = data.name;
 
-        // left buil upd
+        // อัปเดตรูปภาพทางฝั่งซ้าย
         const imgElement = document.getElementById('building-img');
         imgElement.src = data.image;
         imgElement.alt = data.name;
         imgElement.style.display = 'block'; // สั่งให้แสดงรูปภาพ
       }
 
-      // green delet
+      // ลบแถบสีเขียวออกจากปุ่มเดิม
       if (currentSelectedBtn !== null) {
         currentSelectedBtn.classList.remove('active');
       }
 
-      // green add
+      // เพิ่มสีเขียวให้ปุ่มที่เพิ่งกด
       btnElement.classList.add('active');
 
-      // green store
+      // บันทึกปุ่มปัจจุบัน
       currentSelectedBtn = btnElement;
     }
   </script>
