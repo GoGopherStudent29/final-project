@@ -195,16 +195,16 @@
     <div class="right-panel">
       <div class="map-frame">
 
-        <!-- แถวบน -->
+        <!-- up row -->
         <div class="map-row">
           
-          <!-- ประชาสัมพันธ์ -->
+          <!-- publication -->
           <div class="box-pracha">
-            <div>ประชา<br>สัมพันธ์</div>
+            <div>publi<br>cation</div>
             <button class="btn-building btn-mini" onclick="selectBuilding('pracha', this)"></button>
           </div>
 
-          <!-- กลุ่ม B.5, B.2, B.1, statue -->
+          <!--B.5, B.2, B.1, statue -->
           <div class="map-col">
             <div class="map-row">
               <button class="btn-building" onclick="selectBuilding('b5', this)">B. 5</button>
@@ -216,7 +216,7 @@
             </div>
           </div>
 
-          <!-- กรอบ Nersing & Bank -->
+          <!-- corner Nersing & Bank -->
           <div class="group-box">
             <button class="btn-building" onclick="selectBuilding('nursing', this)">Nersing</button>
             <button class="btn-building" onclick="selectBuilding('bank', this)">Bank</button>
@@ -229,17 +229,17 @@
 
         </div>
 
-        <!-- แถวล่าง -->
+        <!-- bottom row -->
         <div class="map-row">
 
-          <!-- ปกครอง -->
+          <!-- student management -->
           <div class="box-pokkrong">
             <div class="pin-icon">📍</div>
             <button class="btn-building" style="height: 100px; width: 35px;" onclick="selectBuilding('pokkrong', this)"></button>
-            <div>ปก<br>ครอง</div>
+            <div>student<br>management</div>
           </div>
 
-          <!-- กลุ่มกลาง: B.3, Assembly field / B.4, B.8 -->
+          <!-- middle: B.3, Assembly field / B.4, B.8 -->
           <div class="map-col">
             <div class="group-box">
               <button class="btn-building" onclick="selectBuilding('b3', this)">B. 3</button>
@@ -251,7 +251,7 @@
             </div>
           </div>
 
-          <!-- กลุ่มขวา: B.9, Gym, Dome, Farm -->
+          <!-- right group: B.9, Gym, Dome, Farm -->
           <div class="group-box grid-2x2">
             <button class="btn-building" onclick="selectBuilding('b9', this)">B. 9</button>
             <button class="btn-building" onclick="selectBuilding('gym', this)">Gym</button>
@@ -280,40 +280,40 @@
        ---------------------------------------------------- */
     const buildingData = {
       'pracha': {
-        name: 'อาคารประชาสัมพันธ์',
-        image: 'https://via.placeholder.com/400x300?text=Pracha+Samphan'
+        name: 'publication [อาคารประชาสัมพันธ์]',
+        image: '<img src="b-pub.jpg" alt="A descriptive summary of the image">'
       },
       'b1': {
         name: 'Building 1 [อาคาร 1]',
-        image: 'https://via.placeholder.com/400x300?text=Building+1'
+        image: '<img src="b-bud.jpg" alt="Publication Building">'
       },
       'b2': {
         name: 'Building 2 [อาคาร 2]',
-        image: 'https://via.placeholder.com/400x300?text=Building+2'
+        image: '<img src="b-2.jpg" alt="Building 2">'
       },
       'b3': {
         name: 'Building 3 [อาคาร 3]',
-        image: 'https://via.placeholder.com/400x300?text=Building+3'
+        image: '<img src="b-3.jpg" alt="Building 3">'
       },
       'b4': {
         name: 'Building 4 [อาคาร 4]',
-        image: 'https://via.placeholder.com/400x300?text=Building+4'
+        image: '<img src="b-4.jpg" alt="Building 4">'
       },
       'b5': {
         name: 'Building 5 [อาคาร 5]',
-        image: 'https://via.placeholder.com/400x300?text=Building+5'
+        image: '<img src="b-5.jpg" alt="Building 5">'
       },
       'b7': {
         name: 'Building 7 [อาคาร 7]',
-        image: 'https://via.placeholder.com/400x300?text=Building+7'
+        image: '<img src="b-7.jpg" alt="Building 7">'
       },
       'b8': {
         name: 'Building 8 [อาคาร 8]',
-        image: 'https://via.placeholder.com/400x300?text=Building+8'
+        image: '<img src="b-8.jpg" alt="Building 8">'
       },
       'b9': {
         name: 'Building 9 [อาคาร 9]',
-        image: 'https://via.placeholder.com/400x300?text=Building+9' // ใส่ URL รูปตึก 9 ตรงนี้
+        image: '<img src="b-9.jpg" alt="Building 9">'
       },
       'statue': {
         name: 'statue [พระพุทธรูปประจำโรงเรียน]',
@@ -328,7 +328,7 @@
         image: 'https://via.placeholder.com/400x300?text=School+Bank'
       },
       'pokkrong': {
-        name: 'อาคารกลุ่มบริหารงานปกครอง',
+        name: 'student management [อาคารกลุ่มบริหารงานปกครอง]',
         image: 'https://via.placeholder.com/400x300?text=Pokkrong'
       },
       'assembly': {
