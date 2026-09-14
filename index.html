@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>CRU Map - แผนที่โรงเรียนชลราษฎรอำรุง</title>
+  <title>CRU MAP - แผนที่โรงเรียนชลราษฎรอำรุง</title>
   <style>
     * {
       box-sizing: border-box;
@@ -11,43 +11,55 @@
 
     body {
       margin: 0;
-      padding: 20px;
-      /* Gradient*/
+      padding: 30px;
+      /* Gradient */
       background: linear-gradient(135deg, #1fa2a6 0%, #e0a323 100%);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center layout horizontally */
     }
 
-    /* main title*/
+    /* main title */
     .main-title {
-      font-size: 56px;
+      font-size: 60px;
       font-weight: bold;
-      margin: 0 0 15px 10px;
+      margin: 0 0 20px 0;
       color: #000;
+      width: 100%;
+      max-width: 1400px;
+      text-align: left;
     }
 
-    /* container for all box */
+    /* container for all box - expanded equal layout */
     .app-container {
       display: flex;
-      gap: 20px;
+      gap: 30px; 
+      justify-content: center;
+      align-items: stretch;
+      width: 100%;
+      max-width: 1400px;
+      height: 650px; /* Fixed height so both panels scale straight */
     }
 
     /* ------------------------------------------
        left map description
        ------------------------------------------ */
     .left-panel {
-      width: 320px;
+      flex: 1; /* Equal width with right panel */
       background-color: #ffffff;
       border: 4px solid #000000;
-      padding: 20px;
+      padding: 30px;
       text-align: center;
-      min-height: 450px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
+      height: 100%;
     }
 
     .building-title {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: bold;
       color: #000;
       margin-bottom: 20px;
@@ -56,9 +68,10 @@
 
     .building-img {
       width: 100%;
-      max-height: 260px;
+      height: 100%;
+      max-height: 480px;
       object-fit: cover;
-      border: 2px solid #000;
+      border: 3px solid #000;
       display: none; /* hide the img */
       border-radius: 4px;
     }
@@ -67,116 +80,142 @@
        right map
        ------------------------------------------ */
     .right-panel {
-      flex: 1;
+      flex: 1; /* Equal width with left panel */
       background-color: #ffffff;
       border: 4px solid #000000;
-      padding: 15px;
-      overflow-x: auto;
+      padding: 20px;
+      display: flex;
+      height: 100%;
     }
 
     /* line around map */
     .map-frame {
-      border: 2px solid #000;
-      padding: 15px;
+      border: 3px solid #000;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
-      min-width: 650px; /*protect from border not aling  */
+      gap: 16px;
+      width: 100%;
+      height: 100%;
+      justify-content: space-between;
     }
 
     .map-row {
       display: flex;
-      gap: 15px;
-      align-items: flex-start;
+      gap: 12px;
+      align-items: stretch;
+      justify-content: space-between;
+      flex: 1;
     }
 
     .map-col {
       display: flex;
       flex-direction: column;
       gap: 10px;
+      justify-content: space-between;
+      flex: 1;
     }
 
-    /* border arounf building butt */
+    /* border around building buttons */
     .group-box {
       border: 2px solid #000;
-      padding: 6px;
+      padding: 8px;
       display: flex;
       gap: 8px;
+      align-items: stretch;
+      justify-content: center;
+      flex: 1;
     }
 
-    /* normal butt */
+    /* normal buttons */
     .btn-building {
       background-color: #000000;
       color: #ffffff;
       border: 2px solid #ff0000;
-      padding: 6px 12px;
+      padding: 8px;
       font-weight: bold;
       font-size: 13px;
       cursor: pointer;
-      border-radius: 3px;
+      border-radius: 4px;
       text-align: center;
       transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      width: 100%;
+      height: 100%;
     }
 
     .btn-building:hover {
       opacity: 0.8;
     }
 
-    /* green */
+    /* green active */
     .btn-building.active {
       background-color: #1b5e20 !important;
       border-color: #00ff00 !important;
       color: #ffffff !important;
-      box-shadow: 0 0 6px #00ff00;
-    }
-
-    /* chang lenght of butt base on the container */
-    .btn-long {
-      padding-left: 25px;
-      padding-right: 25px;
+      box-shadow: 0 0 8px #00ff00;
     }
 
     .box-pracha {
       border: 2px solid #000;
-      padding: 5px;
+      padding: 8px;
       text-align: center;
       font-size: 12px;
       font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-width: 75px;
     }
     
     .btn-mini {
-      width: 25px;
-      height: 25px;
-      padding: 0;
-      margin: 5px auto 0 auto;
+      width: 28px;
+      height: 28px;
+      flex: none;
+      margin: 8px auto 0 auto;
     }
 
     .box-pokkrong {
       border: 2px solid #000;
-      padding: 5px;
+      padding: 8px;
       text-align: center;
       font-size: 12px;
       font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      min-width: 90px;
+    }
+
+    .box-pokkrong .btn-building {
+      flex: 1;
+      width: 32px;
+      margin: 4px 0;
     }
 
     .pin-icon {
       color: red;
-      font-size: 20px;
+      font-size: 18px;
     }
 
     .grid-2x2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 5px;
+      grid-template-rows: 1fr 1fr;
+      gap: 8px;
+      flex: 2;
     }
 
     .btn-football {
-      height: 180px;
-      width: 80px;
-      border-radius: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      flex: 0.8;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.3;
     }
   </style>
 </head>
@@ -208,25 +247,25 @@
           </div>
 
           <!-- B.5, B.2, B.1, statue -->
-          <div class="map-col">
+          <div class="map-col" style="flex: 1.5;">
             <div class="map-row">
               <button class="btn-building" onclick="selectBuilding('b5', this)">B. 5</button>
               <button class="btn-building" onclick="selectBuilding('b2', this)">B. 2</button>
             </div>
             <div class="map-row">
-              <button class="btn-building btn-long" onclick="selectBuilding('b1', this)">B. 1</button>
+              <button class="btn-building" style="flex: 1.5;" onclick="selectBuilding('b1', this)">B. 1</button>
               <button class="btn-building" onclick="selectBuilding('statue', this)">statue</button>
             </div>
           </div>
 
           <!-- corner Nursing & Bank -->
-          <div class="group-box">
+          <div class="group-box" style="flex: 1.2;">
             <button class="btn-building" onclick="selectBuilding('nursing', this)">Nursing</button>
             <button class="btn-building" onclick="selectBuilding('bank', this)">Bank</button>
           </div>
 
           <!-- B. 7 -->
-          <div class="group-box">
+          <div class="group-box" style="flex: 0.6;">
             <button class="btn-building" onclick="selectBuilding('b7', this)">B. 7</button>
           </div>
 
@@ -238,19 +277,19 @@
           <!-- student management -->
           <div class="box-pokkrong">
             <div class="pin-icon">📍</div>
-            <button class="btn-building" style="height: 100px; width: 35px;" onclick="selectBuilding('pokkrong', this)"></button>
+            <button class="btn-building" onclick="selectBuilding('pokkrong', this)"></button>
             <div>student<br>management</div>
           </div>
 
           <!-- middle: B.3, Assembly field / B.4, B.8 -->
-          <div class="map-col">
+          <div class="map-col" style="flex: 2;">
             <div class="group-box">
-              <button class="btn-building" onclick="selectBuilding('b3', this)">B. 3</button>
-              <button class="btn-building btn-long" onclick="selectBuilding('assembly', this)">Assembly field</button>
+              <button class="btn-building" style="flex: 0.7;" onclick="selectBuilding('b3', this)">B. 3</button>
+              <button class="btn-building" style="flex: 1.5;" onclick="selectBuilding('assembly', this)">Assembly field</button>
             </div>
             <div class="group-box">
-              <button class="btn-building btn-long" onclick="selectBuilding('b4', this)">B. 4</button>
-              <button class="btn-building btn-long" onclick="selectBuilding('b8', this)">B. 8</button>
+              <button class="btn-building" onclick="selectBuilding('b4', this)">B. 4</button>
+              <button class="btn-building" onclick="selectBuilding('b8', this)">B. 8</button>
             </div>
           </div>
 
@@ -324,7 +363,7 @@
       },
       'nursing': {
         name: 'Nursing [ห้องพยาบาล]',
-        image: 'https://via.placeholder.com/400x300?text=Nursing+Room'
+        image: 'b-nurse.jpg'
       },
       'bank': {
         name: 'Bank [ธนาคารโรงเรียน]',
