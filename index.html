@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>CRU Map - แผนที่โรงเรียนชลราษฎรอำรุง</title>
+  <style>
+    
+    * {
+      box-sizing: border-box;
+      font-family: 'Tahoma', 'Arial', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      /* พื้นหลังไล่สี Gradient ตามภาพตัวอย่าง */
+      background: linear-gradient(135deg, #1fa2a6 0%, #e0a323 100%);
+      min-height: 100vh;
+    }
+
+    /* หัวข้อใหญ่ */
+    .main-title {
+      font-size: 56px;
+      font-weight: bold;
+      margin: 0 0 15px 10px;
+      color: #000;
+    }
+
+    /* คอนเทนเนอร์หลัก แบ่งเป็น 2 ฝั่ง (ซ้าย-ขวา) */
+    .app-container {
+      display: flex;
+      gap: 20px;
+    }
+
+    /* ------------------------------------------
+       พื้นที่ทางซ้าย: แสดงชื่อตึกและรูปภาพ
+       ------------------------------------------ */
+    .left-panel {
+      width: 320px;
+      background-color: #ffffff;
+      border: 4px solid #000000;
+      padding: 20px;
+      text-align: center;
+      min-height: 450px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .building-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #000;
+      margin-bottom: 20px;
+      word-break: break-word;
+    }
+
+    .building-img {
+      width: 100%;
+      max-height: 260px;
+      object-fit: cover;
+      border: 1px solid #ccc;
+      display: none; /* ซ่อนรูปภาพไว้ก่อน เมื่อยังไม่มีการกดเลือก */
+    }
+
+    /* ------------------------------------------
+       พื้นที่ทางขวา: แผนที่โรงเรียนและปุ่มกด
+       ------------------------------------------ */
+    .right-panel {
+      flex: 1;
+      background-color: #ffffff;
+      border: 4px solid #000000;
+      padding: 15px;
+    }
+
+    /* กรอบเส้นด้านในแผนที่ */
+    .map-frame {
+      border: 2px solid #000;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .map-row {
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+    }
+
+    .map-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* กรอบครอบกลุ่มตึก */
+    .group-box {
+      border: 2px solid #000;
+      padding: 6px;
+      display: flex;
+      gap: 8px;
+    }
+
+    /* รูปแบบปุ่มตึกทั่วไป (พื้นหลังดำ ขอบแดง) */
+    .btn-building {
+      background-color: #000000;
+      color: #ffffff;
+      border: 2px solid #ff0000;
+      padding: 6px 12px;
+      font-weight: bold;
+      font-size: 13px;
+      cursor: pointer;
+      border-radius: 3px;
+      text-align: center;
+    }
+
+    .btn-building:hover {
+      opacity: 0.8;
+    }
+
+    /* สถานะเมื่อปุ่มถูกเลือก (เปลี่ยนเป็นสีเขียว) */
+    .btn-building.active {
+      background-color: #1b5e20 !important;
+      border-color: #00ff00 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 6px #00ff00;
+    }
+
+    /* ปรับแต่งปุ่มเฉพาะตามตำแหน่งแผนที่ */
+    .btn-long {
+      padding-left: 25px;
+      padding-right: 25px;
+    }
+
+    .box-pracha {
+      border: 2px solid #000;
+      padding: 5px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .btn-mini {
+      width: 25px;
+      height: 25px;
+      padding: 0;
+      margin: 5px auto 0 auto;
+    }
+
+    .box-pokkrong {
+      border: 2px solid #000;
+      padding: 5px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .pin-icon {
+      color: red;
+      font-size: 20px;
+    }
+
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+
+    .btn-football {
+      height: 180px;
+      width: 80px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- หัวข้อหลัก -->
+  <h1 class="main-title">CRU map</h1>
+
+  <!-- คอนเทนเนอร์แบ่ง 2 ฝั่ง -->
+  <div class="app-container">
+
+    <!-- ฝั่งซ้าย: แสดงข้อมูลตึกที่เลือก -->
+    <div class="left-panel">
+      <div id="building-name" class="building-title">click on any building</div>
+      <img id="building-img" class="building-img" src="" alt="รูปภาพตึก">
+    </div>
+
+    <!-- ฝั่งขวา: แผนที่โรงเรียนย่อ -->
+    <div class="right-panel">
+      <div class="map-frame">
+
+        <!-- แถวบน -->
+        <div class="map-row">
+          
+          <!-- ประชาสัมพันธ์ -->
+          <div class="box-pracha">
+            <div>ประชา<br>สัมพันธ์</div>
+            <button class="btn-building btn-mini" onclick="selectBuilding('pracha', this)"></button>
+          </div>
+
+          <!-- กลุ่ม B.5, B.2, B.1, statue -->
+          <div class="map-col">
+            <div class="map-row">
+              <button class="btn-building" onclick="selectBuilding('b5', this)">B. 5</button>
+              <button class="btn-building" onclick="selectBuilding('b2', this)">B. 2</button>
+            </div>
+            <div class="map-row">
+              <button class="btn-building btn-long" onclick="selectBuilding('b1', this)">B. 1</button>
+              <button class="btn-building" onclick="selectBuilding('statue', this)">statue</button>
+            </div>
+          </div>
+
+          <!-- กรอบ Nersing & Bank -->
+          <div class="group-box">
+            <button class="btn-building" onclick="selectBuilding('nursing', this)">Nersing</button>
+            <button class="btn-building" onclick="selectBuilding('bank', this)">Bank</button>
+          </div>
+
+          <!-- B. 7 -->
+          <div class="group-box">
+            <button class="btn-building" onclick="selectBuilding('b7', this)">B. 7</button>
+          </div>
+
+        </div>
+
+        <!-- แถวล่าง -->
+        <div class="map-row">
+
+          <!-- ปกครอง -->
+          <div class="box-pokkrong">
+            <div class="pin-icon">📍</div>
+            <button class="btn-building" style="height: 100px; width: 35px;" onclick="selectBuilding('pokkrong', this)"></button>
+            <div>ปก<br>ครอง</div>
+          </div>
+
+          <!-- กลุ่มกลาง: B.3, Assembly field / B.4, B.8 -->
+          <div class="map-col">
+            <div class="group-box">
+              <button class="btn-building" onclick="selectBuilding('b3', this)">B. 3</button>
+              <button class="btn-building btn-long" onclick="selectBuilding('assembly', this)">Assembly feild</button>
+            </div>
+            <div class="group-box">
+              <button class="btn-building btn-long" onclick="selectBuilding('b4', this)">B. 4</button>
+              <button class="btn-building btn-long" onclick="selectBuilding('b8', this)">B. 8</button>
+            </div>
+          </div>
+
+          <!-- กลุ่มขวา: B.9, Gym, Dome, Farm -->
+          <div class="group-box grid-2x2">
+            <button class="btn-building" onclick="selectBuilding('b9', this)">B. 9</button>
+            <button class="btn-building" onclick="selectBuilding('gym', this)">Gym</button>
+            <button class="btn-building" onclick="selectBuilding('farm', this)">Farm</button>
+            <button class="btn-building" onclick="selectBuilding('dome', this)">Dome</button>
+          </div>
+
+          <!-- สนามฟุตบอล -->
+          <button class="btn-building btn-football" onclick="selectBuilding('football', this)">
+            Football<br>feld
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+     2. ส่วนคำนวณและประมวลผล (JavaScript)
+     ========================================== -->
+  <script>
+    /* ----------------------------------------------------
+       TEMPLATE ข้อมูลตึก (สามารถเปลี่ยนชื่อและ URL รูปภาพได้ง่ายที่นี่)
+       ---------------------------------------------------- */
+    const buildingData = {
+      'pracha': {
+        name: 'อาคารประชาสัมพันธ์',
+        image: 'https://via.placeholder.com/400x300?text=Pracha+Samphan'
+      },
+      'b1': {
+        name: 'Building 1 [อาคาร 1]',
+        image: 'https://via.placeholder.com/400x300?text=Building+1'
+      },
+      'b2': {
+        name: 'Building 2 [อาคาร 2]',
+        image: 'https://via.placeholder.com/400x300?text=Building+2'
+      },
+      'b3': {
+        name: 'Building 3 [อาคาร 3]',
+        image: 'https://via.placeholder.com/400x300?text=Building+3'
+      },
+      'b4': {
+        name: 'Building 4 [อาคาร 4]',
+        image: 'https://via.placeholder.com/400x300?text=Building+4'
+      },
+      'b5': {
+        name: 'Building 5 [อาคาร 5]',
+        image: 'https://via.placeholder.com/400x300?text=Building+5'
+      },
+      'b7': {
+        name: 'Building 7 [อาคาร 7]',
+        image: 'https://via.placeholder.com/400x300?text=Building+7'
+      },
+      'b8': {
+        name: 'Building 8 [อาคาร 8]',
+        image: 'https://via.placeholder.com/400x300?text=Building+8'
+      },
+      'b9': {
+        name: 'Building 9 [อาคาร 9]',
+        image: 'https://via.placeholder.com/400x300?text=Building+9' // ใส่ URL รูปตึก 9 ตรงนี้
+      },
+      'statue': {
+        name: 'statue [พระพุทธรูปประจำโรงเรียน]',
+        image: 'https://via.placeholder.com/400x300?text=Statue'
+      },
+      'nursing': {
+        name: 'Nersing [ห้องพยาบาล]',
+        image: 'https://via.placeholder.com/400x300?text=Nursing+Room'
+      },
+      'bank': {
+        name: 'Bank [ธนาคารโรงเรียน]',
+        image: 'https://via.placeholder.com/400x300?text=School+Bank'
+      },
+      'pokkrong': {
+        name: 'อาคารกลุ่มบริหารงานปกครอง',
+        image: 'https://via.placeholder.com/400x300?text=Pokkrong'
+      },
+      'assembly': {
+        name: 'Assembly field [ลานเข้าแถว]',
+        image: 'https://via.placeholder.com/400x300?text=Assembly+Field'
+      },
+      'gym': {
+        name: 'Gym [โรงยิม / อาคารพลศึกษา]',
+        image: 'https://via.placeholder.com/400x300?text=Gym'
+      },
+      'dome': {
+        name: 'Dome [อาคารโดมอเนกประสงค์]',
+        image: 'https://via.placeholder.com/400x300?text=Dome'
+      },
+      'farm': {
+        name: 'Farm [แปลงเกษตร / สวนการเรียนรู้]',
+        image: 'https://via.placeholder.com/400x300?text=Farm'
+      },
+      'football': {
+        name: 'Football field [สนามฟุตบอล]',
+        image: 'https://via.placeholder.com/400x300?text=Football+Field'
+      }
+    };
+
+    // ตัวแปรสำหรับจำว่าตอนนี้ปุ่มไหนกำลังถูกเลือกอยู่
+    let currentSelectedBtn = null;
+
+    /* ----------------------------------------------------
+       ฟังก์ชันสำหรับการทำงานเมื่อผู้ใช้กดปุ่มเลือกตึก
+       ---------------------------------------------------- */
+    function selectBuilding(buildingKey, btnElement) {
+      
+      // 1. ค้นหาข้อมูลตึกจากรหัส (buildingKey)
+      const data = buildingData[buildingKey];
+
+      if (data) {
+        // อัปเดตชื่อตึกทางฝั่งซ้าย
+        document.getElementById('building-name').innerText = data.name;
+
+        // อัปเดตรูปภาพทางฝั่งซ้าย
+        const imgElement = document.getElementById('building-img');
+        imgElement.src = data.image;
+        imgElement.style.display = 'block'; // สั่งให้แสดงรูปภาพ
+      }
+
+      // 2. เคลียร์สีเขียวออกจากปุ่มเดิมที่เคยเลือกไว้ (ถ้ามี)
+      if (currentSelectedBtn !== null) {
+        currentSelectedBtn.classList.remove('active');
+      }
+
+      // 3. เพิ่มสีเขียวให้กับปุ่มใหม่ที่เพิ่งถูกกด
+      btnElement.classList.add('active');
+
+      // 4. บันทึกปุ่มปัจจุบันไว้เป็นปุ่มล่าสุดที่เลือก
+      currentSelectedBtn = btnElement;
+    }
+  </script>
+
+</body>
+</html>
